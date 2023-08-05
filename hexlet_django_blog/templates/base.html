@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Django на Хекслете{% endblock %}</title>
+    <hr>
+</head>
+<body>
+<div id="sidebar">
+    {% block sidebar %}
+    <ul>
+        <li><a href="/">Home page</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/articles/">Articles</a></li>
+        <li><a href="/categories/">Categories</a></li>
+    </ul>
+    <hr>
+    {% endblock %}
+</div>
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

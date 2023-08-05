@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Django Second Try</title>
+  </head>
+  <body class="bg-light">
+    <div class="container mt-4">
+        <header>
+            {% include "./navigation.html" %}
+        </header>
+      </div>
+
+      <div class="container">
+      <main>
+        {% block content %}
+        {% endblock %}
+      </main>
+      </div>
+      </body>
+</html>

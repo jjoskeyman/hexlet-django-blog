@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Django | Articles{% endblock %}
+{% block content %}
+<h1>Статьи:</h1>
+<p>Эксперименты с Django на Хекслете</p>
+<p>{{ tags|join:', ' }}</p>
+{% endblock %}
