@@ -1,6 +1,6 @@
-{% extends 'layout.html' %}
+{% extends 'women/base.html' %}
 {% block content %}
-<h1>Статьи</h1>
+<h1>Статьи:</h1>
 <ul>
   {% for article in articles_list %}
   <li>{{ article.title }} by {{ article.author }}</li>
