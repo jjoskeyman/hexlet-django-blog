@@ -1,6 +1,8 @@
 from django.http import HttpResponseNotFound, Http404, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
+
+from .forms import *
 from .models import *
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
@@ -20,15 +22,14 @@ articles_list = [
 
 def index(request):
     posts = Women.objects.all()
-    categories = Category.objects.all()
 
     context = {
         'posts': posts,
-        'cats': categories,
         'menu': menu,
         'title': 'Главная страница',
         'cat_selected': 0,
     }
+
     return render(request, 'women/index.html', context=context)
 
 
@@ -57,7 +58,15 @@ def about(request):
 
 
 def addpage(request):
-    return HttpResponse("Добавление статьи")
+    if request.method == 'POST':
+        form = AddPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            # print(form.cleaned_data)
+            form.save()
+            return redirect('home')
+    else:
+        form = AddPostForm()
+    return render(request, 'women/add_page.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
 
 
 def contact(request):
@@ -68,23 +77,32 @@ def login(request):
     return HttpResponse("Авторизация")
 
 
-def show_post(request, post_id):
-    return HttpResponse(f"Отображение статьи с id = {post_id}")
+def show_post(request, post_slug):
+    post = get_object_or_404(Women, slug=post_slug)
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'cat_selected': post.cat_id,
+    }
+
+    return render(request, 'women/post.html', context=context)
 
 
-def show_category(request, cat_id):
-    posts = Women.objects.all().filter(cat_id=cat_id)
-    categories = Category.objects.all()
+def show_category(request, cat_slug):
+    cat = Category.objects.filter(slug=cat_slug)
+    posts = Women.objects.filter(cat_id=cat[0].id)
+
     if len(posts) == 0:
         raise Http404()
 
     context = {
         'posts': posts,
-        'cats': categories,
         'menu': menu,
         'title': 'Отображение по рубрикам',
-        'cat_selected': cat_id,
+        'cat_selected': cat[0].id,
     }
+
     return render(request, 'women/index.html', context=context)
 
 
