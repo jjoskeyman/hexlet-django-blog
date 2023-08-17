@@ -1,9 +1,16 @@
 from django.http import HttpResponseNotFound, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
-
+from django.views import View
 from .forms import *
 from .models import *
+from django.db.models import Q
+
+#
+# import os
+#
+# SECRET_KEY = os.getenv('SECRET_KEY')
+# DEBUG = os.getenv('DEBUG', False)
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Добавить статью", 'url_name': 'add_page'},
@@ -20,17 +27,33 @@ articles_list = [
 ]
 
 
-def index(request):
-    posts = Women.objects.all()
+# def index(request):
+#     posts = Women.objects.all()[:3]
+#
+#     context = {
+#         'posts': posts,
+#         'menu': menu,
+#         'title': 'Главная страница',
+#         'cat_selected': 0,
+#     }
+#
+#     return render(request, 'women/index.html', context=context)
+class IndexView(View):
 
-    context = {
-        'posts': posts,
-        'menu': menu,
-        'title': 'Главная страница',
-        'cat_selected': 0,
-    }
+    def get(self, request, *args, **kwargs):
+        search_query = request.GET.get('q', '')
+        if search_query:
+            posts = Women.objects.filter(Q(title__icontains=search_query))
+        else:
+            posts = Women.objects.all()
 
-    return render(request, 'women/index.html', context=context)
+        context = {
+            'posts': posts,
+            'menu': menu,
+            'title': 'Главная страница',
+            'cat_selected': 0,
+        }
+        return render(request, 'women/index.html', context=context)
 
 
 @require_http_methods(['GET', 'POST'])

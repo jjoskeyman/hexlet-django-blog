@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import *
 
-
+# @admin.register(Women)
 class WomenAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'time_create', 'photo', 'is_published', 'cat')
     list_display_links = ('id', 'title')
