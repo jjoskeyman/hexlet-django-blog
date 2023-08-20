@@ -1,11 +1,12 @@
 from django.urls import path, re_path
 import women.views
 from .views import *
-from women.views import IndexView, PostFormEditView
+from women.views import IndexView, PostFormEditView, PostFormDeleteView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='home'),  # http://127.0.0.1:8000/women/ - 500 errr
     path('post/<slug:slug>/edit/', PostFormEditView.as_view(), name='posts_update'),
+    path('post/<slug:slug>/delete/', PostFormDeleteView.as_view(), name='posts_delete'),
     # path('articles/', articles, name='articles'),  # http://127.0.0.1:8000/articles/
     # path('articles/<int:article_id>/', women.views.article_get),
     path('about/', about, name='about'),

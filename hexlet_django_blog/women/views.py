@@ -32,26 +32,6 @@ class IndexView(View):
         return render(request, 'women/index.html', context=context)
 
 
-# @require_http_methods(['GET', 'POST'])
-# def articles(request):
-#     if request.method == 'POST':
-#         article = {
-#             'id': int(request.POST['id']),
-#             'title': request.POST['title'],
-#             'author': request.POST['author']
-#         }
-#         articles.append(article)
-#     return render(request, 'articles/index.html', context={'articles_list': articles_list})
-
-
-# @require_http_methods(['GET'])
-# def article_get(request, article_id):
-#     article = next((a for a in articles_list if a['id'] == article_id), None)
-#     if not article:
-#         raise Http404()
-#     return render(request, 'articles/article.html', context={'articles_list': articles_list})
-
-
 def about(request):
     return render(request, 'women/about.html', {'menu': menu, 'title': 'О сайте'})
 
@@ -81,12 +61,22 @@ class PostFormEditView(View):
     def post(self, request, *args, **kwargs):
         slug = kwargs.get('slug')
         post = Women.objects.get(slug=slug)
-        form = AddPostForm(request.POST, instance=post)
+        form = AddPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
             return redirect('home')
         return render(request, 'women/update.html', {'form': form, 'slug': slug})
 
+
+class PostFormDeleteView(View):
+
+    def post(self, request, *args, **kwargs):
+        slug = kwargs.get('slug')
+        post = Women.objects.get(slug=slug)
+        if post:
+            post.delete()
+        messages.success(request, 'Post delited successfully')
+        return redirect('home')
 
 def contact(request):
     return HttpResponse("Обратная связь")
