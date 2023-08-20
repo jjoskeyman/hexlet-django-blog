@@ -29,7 +29,7 @@ def show_categories(sort=None, cat_selected=0):
 #         return Women.objects.filter(pk=filter)
 #
 #
-# @register.inclusion_tag('women/list_posts.html')
+# @register.inclusion_tag('women/update.html')
 # def show_posts(sort=None, cat_selected=1):
 #     if not sort:
 #         posts = Women.objects.all()

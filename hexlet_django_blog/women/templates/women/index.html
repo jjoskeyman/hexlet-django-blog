@@ -1,9 +1,12 @@
 {% extends 'women/base.html' %}
 
 {% block content %}
+{% for msg in messages %}
+<h1> {{ msg }} </h1>
+{% endfor %}
 <form class="form-inline my-2 my-lg-0" action="{% url 'home' %}">
-	<input class="form-control mr-sm-2" type="search" placeholder="Название статьи" aria-label="Search" name="q">
-	<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+    <input class="form-control mr-sm-2" type="search" placeholder="Название статьи" aria-label="Search" name="q">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
 </form>
 <ul class="list-articles">
     {% for p in posts %}

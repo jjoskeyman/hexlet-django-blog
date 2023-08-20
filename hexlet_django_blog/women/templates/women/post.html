@@ -8,4 +8,6 @@
 {% endif %}
 
 {{post.content|linebreaks}}
+<!--<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Редактировать пост</a></p>-->
+<p class="link-read-post"><a href="{% url 'posts_update' post.slug %}">Редактировать пост</a></p>
 {% endblock %}

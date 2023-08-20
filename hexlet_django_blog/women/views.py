@@ -5,39 +5,15 @@ from django.views import View
 from .forms import *
 from .models import *
 from django.db.models import Q
-
-#
-# import os
-#
-# SECRET_KEY = os.getenv('SECRET_KEY')
-# DEBUG = os.getenv('DEBUG', False)
+from django.contrib import messages
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Добавить статью", 'url_name': 'add_page'},
         {'title': "Обратная связь", 'url_name': 'contact'},
-        {'title': "Войти", 'url_name': 'login'}
+        {'title': "Войти", 'url_name': 'login'},
         ]
 
-articles_list = [
-    {'id': 1, 'title': '"How to foo?"', 'author': 'F. BarBaz'},
-    {'id': 2, 'title': '"Force 101"', 'author': 'O-W. Kenobi'},
-    {'id': 3, 'title': '"Top 10 skyscrapers"', 'author': 'K. Kong'},
-    {'id': 4, 'title': '"Top 10 skyscrapers (jp. edition)"', 'author': 'K. Godzilla'},
-    {'id': 5, 'title': '"5 min recepies"', 'author': 'H. Lector'},
-]
 
-
-# def index(request):
-#     posts = Women.objects.all()[:3]
-#
-#     context = {
-#         'posts': posts,
-#         'menu': menu,
-#         'title': 'Главная страница',
-#         'cat_selected': 0,
-#     }
-#
-#     return render(request, 'women/index.html', context=context)
 class IndexView(View):
 
     def get(self, request, *args, **kwargs):
@@ -56,24 +32,24 @@ class IndexView(View):
         return render(request, 'women/index.html', context=context)
 
 
-@require_http_methods(['GET', 'POST'])
-def articles(request):
-    if request.method == 'POST':
-        article = {
-            'id': int(request.POST['id']),
-            'title': request.POST['title'],
-            'author': request.POST['author']
-        }
-        articles.append(article)
-    return render(request, 'articles/index.html', context={'articles_list': articles_list})
+# @require_http_methods(['GET', 'POST'])
+# def articles(request):
+#     if request.method == 'POST':
+#         article = {
+#             'id': int(request.POST['id']),
+#             'title': request.POST['title'],
+#             'author': request.POST['author']
+#         }
+#         articles.append(article)
+#     return render(request, 'articles/index.html', context={'articles_list': articles_list})
 
 
-@require_http_methods(['GET'])
-def article_get(request, article_id):
-    article = next((a for a in articles_list if a['id'] == article_id), None)
-    if not article:
-        raise Http404()
-    return render(request, 'articles/article.html', context={'articles_list': articles_list})
+# @require_http_methods(['GET'])
+# def article_get(request, article_id):
+#     article = next((a for a in articles_list if a['id'] == article_id), None)
+#     if not article:
+#         raise Http404()
+#     return render(request, 'articles/article.html', context={'articles_list': articles_list})
 
 
 def about(request):
@@ -89,7 +65,27 @@ def addpage(request):
             return redirect('home')
     else:
         form = AddPostForm()
+    messages.success(request, 'Post added successfully')
     return render(request, 'women/add_page.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
+
+
+class PostFormEditView(View):
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get('slug')
+        post = Women.objects.get(slug=slug)
+        form = AddPostForm(instance=post)
+        messages.success(request, 'Post edited successfully')
+        return render(request, 'women/update.html', {'form': form, 'slug': slug})
+
+    def post(self, request, *args, **kwargs):
+        slug = kwargs.get('slug')
+        post = Women.objects.get(slug=slug)
+        form = AddPostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        return render(request, 'women/update.html', {'form': form, 'slug': slug})
 
 
 def contact(request):
