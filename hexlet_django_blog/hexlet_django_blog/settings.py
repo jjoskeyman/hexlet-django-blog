@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hexlet_django_blog',
-    'women.apps.WomenConfig'
+    'women.apps.WomenConfig',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
