@@ -38,17 +38,3 @@ class Category(models.Model):
         verbose_name = "Категории"
         verbose_name_plural = "Категории"
         ordering = ['id', 'name']
-
-# class Women(models.Model):
-#     Trainee = 'TR'
-#     Junior = 'JR'
-#     Senior = 'SR'
-#     CEO = 'CEO'
-#     position_choise = [
-#         ('TR', 'Trainee'),
-#         ('JR', 'Junior'),
-#         ('SR', 'Senior'),
-#         ('CEO', 'CEO'),
-#     ]
-#     position = models.CharField(max_length=3, choices=position_choise, default='TR')
-#     timestamp = models.DateTimeField(auto_now_add=True)

@@ -6,13 +6,14 @@
 {% if post.photo %}
 <p><img class="img-article-left" src="{{post.photo.url}}"></p>
 {% endif %}
-
 {{post.content|linebreaks}}
-
-<p class="link-read-post"><a href="{% url 'posts_update' post.slug %}">Редактировать пост</a></p>
-
- <form action="{% url 'posts_delete' post.slug %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Удалить">
-</form>
 {% endblock %}
+
+<!-- <form action="{% url 'posts_delete' post_slug %}" method="post">-->
+<!--    {% csrf_token %}-->
+<!--    <input type="submit" value="Удалить">-->
+<!--</form>-->
+
+
+
+<!--<p class="link-read-post"><a href="{% url 'posts_update' post_slug %}">Редактировать пост</a></p>-->
