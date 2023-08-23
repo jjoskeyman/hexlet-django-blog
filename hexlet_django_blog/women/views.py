@@ -23,8 +23,14 @@ class IndexView(DataMixin, ListView):
         return Women.objects.filter(is_published=True)
 
 
-def about(request):
-    return render(request, 'women/about.html', {'menu': menu, 'title': 'О сайте'})
+class About(DataMixin, ListView):
+    model = Women
+    template_name = 'women/about.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="О сайте")
+        return dict(list(context.items()) + list(c_def.items()))
 
 
 class AddPage(LoginRequiredMixin, DataMixin, CreateView):
@@ -33,24 +39,12 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     success_url = reverse_lazy('home')
     login_url = reverse_lazy('home')
     raise_exception = True
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
         c_def = self.get_user_context(title="Добавление статьи")
         return dict(list(context.items()) + list(c_def.items()))
-
-
-# def addpage(request):
-#     if request.method == 'POST':
-#         form = AddPostForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             # print(form.cleaned_data)
-#             form.save()
-#             return redirect('home')
-#     else:
-#         form = AddPostForm()
-#     messages.success(request, 'Post added successfully')
-#     return render(request, 'women/add_page.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
 
 
 class PostFormEditView(DetailView):
@@ -81,14 +75,6 @@ class PostFormDeleteView(DeleteView):
         return redirect('home')
 
 
-def contact(request):
-    return HttpResponse("Обратная связь")
-
-
-def login(request):
-    return HttpResponse("Авторизация")
-
-
 class ShowPost(DataMixin, DetailView):
     model = Women
     template_name = 'women/post.html'
@@ -99,18 +85,6 @@ class ShowPost(DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title=context["post"])
         return dict(list(context.items()) + list(c_def.items()))
-
-
-# def show_post(request, post_slug):
-#     post = get_object_or_404(Women, slug=post_slug)
-#     context = {
-#         'post': post,
-#         'menu': menu,
-#         'title': post.title,
-#         'cat_selected': post.cat_id,
-#     }
-#
-#     return render(request, 'women/post.html', context=context)
 
 
 class WomenCategory(DataMixin, ListView):
@@ -127,6 +101,14 @@ class WomenCategory(DataMixin, ListView):
         c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].cat),
                                       cat_selected=context['posts'][0].cat_id)
         return dict(list(context.items()) + list(c_def.items()))
+
+
+def contact(request):
+    return HttpResponse("Обратная связь")
+
+
+def login(request):
+    return HttpResponse("Авторизация")
 
 
 def page_not_found(request, exception):
