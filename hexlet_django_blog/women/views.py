@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponseNotFound, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -104,7 +105,12 @@ class WomenCategory(DataMixin, ListView):
 
 
 def contact(request):
-    return HttpResponse("Обратная связь")
+    contact_list = Women.objects.all()
+    paginator = Paginator(contact_list, 2)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'women/contact.html', {'page_obj': page_obj, 'title': 'Обратная связь', 'menu': menu})
 
 
 def login(request):
