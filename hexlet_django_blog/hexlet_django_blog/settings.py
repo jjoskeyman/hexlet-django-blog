@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'hexlet_django_blog',
     'women.apps.WomenConfig',
     'django_extensions',
+    'captcha',
     "debug_toolbar",
 ]
 
@@ -138,3 +139,10 @@ MEDIA_URL = '/media/'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'hexlet_django_blog_cache'),
+    }
+}

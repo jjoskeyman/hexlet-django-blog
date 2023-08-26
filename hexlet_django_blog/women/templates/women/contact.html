@@ -3,16 +3,17 @@
 {% block content %}
 <h1>{{title}}</h1>
 
-{% for item in page_obj %}
-<p>{{ item }}</p>
+<form method="post">
+    {% csrf_token %}
+
+    <div class="form-error">{{ form.non_field_errors }}</div>
+
+{% for f in form %}
+<p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
+<div class="form-error">{{ f.errors }}</div>
 {% endfor %}
-<nav>
-    <ul>
-        {% for p in page_obj.paginator.page_range %}
-        <li>
-            <a href="?page={{ p }}">{{ p }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-</nav>
+
+    <button type="submit">Отправить</button>
+</form>
+
 {% endblock %}
