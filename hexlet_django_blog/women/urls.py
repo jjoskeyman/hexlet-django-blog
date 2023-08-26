@@ -1,5 +1,4 @@
-from django.urls import path, re_path
-import women.views
+from django.urls import path
 from .views import *
 from women.views import IndexView, PostFormEditView, PostFormDeleteView
 

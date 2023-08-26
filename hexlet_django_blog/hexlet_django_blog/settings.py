@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'hexlet_django_blog',
     'women.apps.WomenConfig',
     'django_extensions',
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'hexlet_django_blog.urls'
@@ -133,3 +135,6 @@ STATICFILES_DIRS = []
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
